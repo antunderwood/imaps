@@ -5,7 +5,7 @@ var jQT = new $.jQTouch({
     startupScreen: 'jqt_startup.png',
     statusBar: 'black'
 });
-
+//Map
 var osMap;
 function init_map()
 {
@@ -22,3 +22,25 @@ function init_map()
   marker = new OpenLayers.Marker(pos);
   markers.addMarker(marker);
 }
+//Location
+function check_location(){
+     function setDisplay(text) {
+         $('.info').empty().append(text)
+     }
+     
+     // We pass "updateLocation" a callback function,
+     // to run once we have the coordinates.
+     // We also set it to a variable, so we can know
+     // right away if it's working or not
+     var lookup = jQT.updateLocation(function(coords){
+         if (coords) {
+             setDisplay('Latitude: ' + coords.latitude + '<br />Longitude: ' + coords.longitude);
+         } else {
+             setDisplay('Device not capable of geo-location.');
+         }
+     });
+
+     if (lookup) {
+         setDisplay('Looking up location&hellip;');
+     }
+ }
