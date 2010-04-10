@@ -10,17 +10,10 @@ var osMap;
 function init_map()
 {
   osMap = new OpenSpace.Map('map');
-  var lonlat = new OpenLayers.LonLat(-0.3879547119140625, 51.6934690476718);
+  var lonlat = new OpenLayers.LonLat(-0.0007510185241699219, 51.47718666743929);
   var gridProjection = new OpenSpace.GridProjection();
   var pos = gridProjection.getMapPointFromLonLat(lonlat);
   osMap.setCenter(pos, 8);
-
-  var markers = new OpenLayers.Layer.Markers("Markers");
-  osMap.addLayer(markers);
-
-  var marker;
-  marker = new OpenLayers.Marker(pos);
-  markers.addMarker(marker);
 }
 //Location
 function check_location(){
@@ -34,7 +27,18 @@ function check_location(){
      // right away if it's working or not
      var lookup = jQT.updateLocation(function(coords){
          if (coords) {
-             setDisplay('Latitude: ' + coords.latitude + '<br />Longitude: ' + coords.longitude);
+             setDisplay('setting location tp Latitude: ' + coords.latitude + ' Longitude: ' + coords.longitude);
+             var lonlat = new OpenLayers.LonLat(coords.longitude, coords.latitude);
+             var gridProjection = new OpenSpace.GridProjection();
+             var pos = gridProjection.getMapPointFromLonLat(lonlat);
+             osMap.setCenter(pos, 8);
+             
+             var markers = new OpenLayers.Layer.Markers("Markers");
+             osMap.addLayer(markers);
+
+             var marker;
+             marker = new OpenLayers.Marker(pos);
+             markers.addMarker(marker);
          } else {
              setDisplay('Device not capable of geo-location.');
          }
