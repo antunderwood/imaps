@@ -27,7 +27,7 @@ function check_location(){
      // right away if it's working or not
      var lookup = jQT.updateLocation(function(coords){
          if (coords) {
-             setDisplay('setting location tp Latitude: ' + coords.latitude + ' Longitude: ' + coords.longitude);
+             setDisplay('setting map to current location');
              var lonlat = new OpenLayers.LonLat(coords.longitude, coords.latitude);
              var gridProjection = new OpenSpace.GridProjection();
              var pos = gridProjection.getMapPointFromLonLat(lonlat);
@@ -39,8 +39,11 @@ function check_location(){
              var marker;
              marker = new OpenLayers.Marker(pos);
              markers.addMarker(marker);
+             $('.info').fadeOut(3000);
+             
          } else {
              setDisplay('Device not capable of geo-location.');
+             $('.info').fadeOut('slow');
          }
      });
 
