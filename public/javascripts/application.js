@@ -10,8 +10,9 @@ var osMap;
 var openStreetMap;
 var openCycleMap;
 var coords;
+
 $(document).ready(function() {
-  check_location();
+  update_location();
   $('#osmap_pane').bind('pageAnimationEnd', function(event, info){
     if (info.direction == 'in'){
       if (! $("#osmap_OpenLayers_ViewPort").length){ // if os map not already initialised
@@ -124,7 +125,7 @@ function centre_map_and_add_marker(coords, map_type){
 function setDisplay(text) {
   $('.info').empty().append(text)
 }
-function check_location(){
+function update_location(){
   // We pass "updateLocation" a callback function,
   // to run once we have the coordinates.
   // We also set it to a variable, so we can know
@@ -143,4 +144,14 @@ function check_location(){
   } else if (lookup){
     setDisplay('Looking up location&hellip;');
   }
+}
+function searchPostcode(postcode)
+{
+ postcodeService.getLonLat(postcode, onResult);
+ return false;
+}
+function onResult(mapPoint)
+{
+  lonlat = getLonLatFromMapPoint(mapPoint);
+ alert(lonlat);
 }
