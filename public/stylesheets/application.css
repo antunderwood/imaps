@@ -1,4 +1,12 @@
-#map {
+#osmap {
+  width: 320px;
+  height: 375px;
+}
+#open_streetmap {
+  width: 320px;
+  height: 375px;
+}
+#open_cyclemap {
   width: 320px;
   height: 375px;
 }

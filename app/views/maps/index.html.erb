@@ -1,2 +1,36 @@
-<h1>Maps#index</h1>
-<p>Find me in app/views/maps/index.html.erb</p>
+<%- content_for :extra_javascript do -%>
+  <!-- Ordnance survey javascript -->
+  <script type="text/javascript" src="http://openspace.ordnancesurvey.co.uk/osmapapi/openspace.js?key=83E780CB3C5625AFE0405F0AC86040CC"></script>
+  <!-- Open street map and cycle map javascript -->
+  <script src="http://www.openlayers.org/api/OpenLayers.js"></script>
+  <script src="http://www.openstreetmap.org/openlayers/OpenStreetMap.js"></script>
+<%- end -%>
+
+<div id="home">
+  <ul>
+    <li class="arrow"><a href="#osmap_pane">OS map</a></li>
+    <li class="arrow"><a href="#open_streetmap_pane">Open Streetmap</a></li>
+    <li class="arrow"><a href="#open_cyclemap_pane">Open Cyclemap</a></li>
+  </ul>
+</div>
+<div id="osmap_pane">
+    <div class="toolbar">
+        <h1>Ordnance Survey</h1><a class="back button" href="#">Back</a>
+    </div>
+    <div class="info"></div>
+    <div id="osmap"></div>
+</div>
+<div id="open_streetmap_pane">
+    <div class="toolbar">
+        <h1>Open Streetmap</h1><a class="back button" href="#">Back</a>
+    </div>
+    <div class="info"></div>
+    <div id="open_streetmap"></div>
+</div>
+<div id="open_cyclemap_pane">
+    <div class="toolbar">
+        <h1>Open Streetmap</h1><a class="back button" href="#">Back</a>
+    </div>
+    <div class="info"></div>
+    <div id="open_cyclemap"></div>
+</div>

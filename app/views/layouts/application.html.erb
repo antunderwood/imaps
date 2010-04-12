@@ -8,14 +8,7 @@
   <%= yield :extra_javascript %>
   <%= stylesheet_link_tag 'application', 'jqtouch.min', 'apple_theme.min' %>
 </head>
-<body onload="<%= yield :onload %>">
-  <div>
-      <div class="toolbar">
-          <h1>Local map</h1>
-      </div>
-      <div class="info"></div>
-      <%= yield %>
-
-  </div>
+<body>
+  <%= yield %>
 </body>
 </html>
