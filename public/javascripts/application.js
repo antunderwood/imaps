@@ -25,7 +25,9 @@ function check_location(){
      // to run once we have the coordinates.
      // We also set it to a variable, so we can know
      // right away if it's working or not
+     var coords;
      var lookup = jQT.updateLocation(function(coords){
+         
          if (coords) {
              setDisplay('setting map to current location');
              var lonlat = new OpenLayers.LonLat(coords.longitude, coords.latitude);
@@ -49,5 +51,8 @@ function check_location(){
 
      if (lookup) {
          setDisplay('Looking up location&hellip;');
+         //if (TARGET_IPHONE_SIMULATOR){
+         //  setDisplay('simulator');
+         //}
      }
  }
