@@ -1,8 +1,8 @@
 // JQtouch
 var jQT = new $.jQTouch({
-  icon: '/icon.png',
+  icon: '/images/icon.png',
   addGlossToIcon: false,
-  startupScreen: '/startup.png',
+  startupScreen: '/images/startup.png',
   statusBar: 'default'
 });
 //Map
