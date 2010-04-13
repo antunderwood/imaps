@@ -1,9 +1,9 @@
 // JQtouch
 var jQT = new $.jQTouch({
-  icon: 'jqtouch.png',
+  icon: '/icon.png',
   addGlossToIcon: false,
-  startupScreen: 'jqt_startup.png',
-  statusBar: 'black'
+  startupScreen: '/startup.png',
+  statusBar: 'default'
 });
 //Map
 var osMap;
@@ -210,22 +210,25 @@ function searchPlace(address)
                 country = address_components[j].short_name;
               }
             }
-            var name = "";
+            var name_elements =  new Array();
             if (locality != ""){
-              name = name + locality + ", ";
+              name_elements.push(locality);
+            } else {
+              continue;
             }
             if (county != ""){
-              name = name + county + ", ";
+              name_elements.push(county);
             }
             if (country != "undefined"){
-              name = name + country;
+              name_elements.push(country);
             }
+            name_elements = $.uniq(name_elements);
             var location  = results[i].geometry.location
-            choices.push({'name': name, 'longitude': location.lng(), 'latitude': location.lat() });
+            choices.push({'name': name_elements.join(' ,'), 'longitude': location.lng(), 'latitude': location.lat() });
           }
           $('#search_results').show();
           search_results_text = $.map(choices, function(c){return "<li><span onclick='update_coords_after_search(" + c.longitude + "," + c.latitude + ")'>" + c.name + "</span></li>"}).join('');
-          $('#search_results').html("<h1>Pick location</h1>" + search_results_text);
+          $('#search_results').html("<h1>Choose a location</h1>" + search_results_text);
         }
       } else {
         alert("Could not find a location for the place " + $('#place').val());
@@ -233,3 +236,37 @@ function searchPlace(address)
     });
   }
 }
+/** jQuery.uniq
+* Author: Florent Vaucelle (florentvaucelle@gmail.com)
+* 
+* Get uniq values from an Array
+* Data type is respected
+* Usage: jQuery.uniq(anArray)
+* 
+* Requirement: jQuery >= 1.3
+*/
+
+;(function($) {
+  $.uniq = function(notUniqArray) {
+    // Check that we were given an array
+    // If not, return the object
+    if (!$.isArray(notUniqArray)) return notUniqArray
+    
+    // Add each array value as a key in a map
+    var map = {}
+    for (var index in notUniqArray) {
+      value = notUniqArray[index]
+      // Store type_value as a map key,
+      // unless 5 and '5' would be the same as a map key
+      map[typeof value + '_' + value] = value
+    }
+    
+    // Build a new array with each map keys
+    var uniqValues = []
+    for (var key in map) {
+      uniqValues.push(map[key])
+    }
+    
+    return uniqValues
+  };
+})(jQuery);
