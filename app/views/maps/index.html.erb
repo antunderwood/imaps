@@ -1,56 +1,52 @@
-  <%- content_for :extra_javascript do -%>
-  <!-- Ordnance survey javascript -->
-  <script type="text/javascript" src="http://openspace.ordnancesurvey.co.uk/osmapapi/openspace.js?key=83E780CB3C5625AFE0405F0AC86040CC"></script>
-  <!-- Open street map and cycle map javascript -->
-  <script src="http://www.openlayers.org/api/OpenLayers.js"></script>
-  <script src="http://www.openstreetmap.org/openlayers/OpenStreetMap.js"></script>
-  <script>var postcodeService = new OpenSpace.Postcode();</script>
-  <%- end -%>
-
-  <div id="home">
-    <div class="toolbar">
-      <h1>Home</h1>
-    </div>
+<div id="home">
+  <div class="toolbar">
+    <h1>Home</h1>
+  </div>
+  <ul>
+    <li class="arrow"><a href="#osmap_pane">OS map</a></li>
+    <li class="arrow"><a href="#open_streetmap_pane">Open Streetmap</a></li>
+    <li class="arrow"><a href="#open_cyclemap_pane">Open Cyclemap</a></li>
+  </ul>
+  <div class="free_floating"><a href="#" onclick="update_location();" class="whiteButton">Update location</a></div>
+  <ul>
+    <li class="arrow"><a href="#search_pane">Search</a></li>
+  </ul>
+</div>
+<div id="osmap_pane">
+  <div class="toolbar">
+    <h1>OS</h1><a class="button" href="#home">Home</a>
+  </div>
+  <div class="info"></div>
+  <div id="osmap"></div>
+</div>
+<div id="open_streetmap_pane">
+  <div class="toolbar">
+    <h1>Open Street</h1><a class="button" href="#home">Home</a>
+  </div>
+  <div class="info"></div>
+  <div id="open_streetmap"></div>
+</div>
+<div id="open_cyclemap_pane">
+  <div class="toolbar">
+    <h1>Open Cycle</h1><a class="button" href="#home">Home</a>
+  </div>
+  <div class="info"></div>
+  <div id="open_cyclemap"></div>
+</div>
+<div id="search_pane">
+  <div class="toolbar">
+    <h1>Search</h1><a class="button" href="#home">Home</a>
+  </div>
+  <div class="info"></div>
     <ul>
-      <li class="arrow"><a href="#osmap_pane">OS map</a></li>
-      <li class="arrow"><a href="#open_streetmap_pane">Open Streetmap</a></li>
-      <li class="arrow"><a href="#open_cyclemap_pane">Open Cyclemap</a></li>
+      <li><input type="text" name="postcode" placeholder="Postcode" id="postcode" /></li>
     </ul>
-    <a href="#" onclick="update_location();" class="whiteButton">Update location</a>
+    <div class="free_floating"><input type="submit" class ="whiteButton" name="submit" value="Search for postcode" onclick="searchPostcode($('#postcode').val());return false;"/></div>
     <ul>
-      <li class="arrow"><a href="#search">Search</a></li>
+      <li><input type="text" name="place" placeholder="Place/Town/Address" id="place" /></li>
     </ul>
-  </div>
-  <div id="osmap_pane">
-    <div class="toolbar">
-      <h1>OS</h1><a class="button" href="#home">Home</a>
-    </div>
-    <div class="info"></div>
-    <div id="osmap"></div>
-  </div>
-  <div id="open_streetmap_pane">
-    <div class="toolbar">
-      <h1>Open Street</h1><a class="button" href="#home">Home</a>
-    </div>
-    <div class="info"></div>
-    <div id="open_streetmap"></div>
-  </div>
-  <div id="open_cyclemap_pane">
-    <div class="toolbar">
-      <h1>Open Cycle</h1><a class="button" href="#home">Home</a>
-    </div>
-    <div class="info"></div>
-    <div id="open_cyclemap"></div>
-  </div>
-  <div id="search">
-    <div class="toolbar">
-      <h1>Search</h1><a class="button" href="#home">Home</a>
-    </div>
-    <form>
-      <ul>
-        <li><input type="text" name="postcode" placeholder="Postcode" id="postcode" /></li>
-      </ul>
-      <input type="submit" class ="whiteButton" name="submit" onclick="searchPostcode($('#postcode').val());return false;"/>
-    </form>
+    <div class="free_floating"><input type="submit" class ="whiteButton" name="submit" value="Search for place" onclick="searchPlace($('#place').val());return false;"/></div>
+    <ul id="search_results">
+    </ul>
 
-  </div>
+</div>

@@ -10,8 +10,13 @@ var osMap;
 var openStreetMap;
 var openCycleMap;
 var coords;
-
+var gridProjection;
+var postcodeService;
+var geocoder;
 $(document).ready(function() {
+  gridProjection = new OpenSpace.GridProjection();
+  postcodeService = new OpenSpace.Postcode();
+  geocoder = new google.maps.Geocoder();
   update_location();
   $('#osmap_pane').bind('pageAnimationEnd', function(event, info){
     if (info.direction == 'in'){
@@ -40,12 +45,17 @@ $(document).ready(function() {
       $('.info').fadeOut(6000);
     }
   });
+  $('#search_pane').bind('pageAnimationStart', function(event, info){
+    if (info.direction == 'in'){
+      $('.info').hide();
+    }
+  });
 });
 function init_osmap()
 {
   osMap = new OpenSpace.Map('osmap');
   var lonlat = new OpenLayers.LonLat(-0.0007510185241699219, 51.47718666743929);
-  var gridProjection = new OpenSpace.GridProjection();
+  gridProjection = new OpenSpace.GridProjection();
   var pos = gridProjection.getMapPointFromLonLat(lonlat);
   osMap.setCenter(pos, 8);
 }
@@ -91,15 +101,18 @@ function init_open_cyclemap()
 function centre_map_and_add_marker(coords, map_type){
   if (map_type == 'osmap'){
     var lonlat = new OpenLayers.LonLat(coords.longitude, coords.latitude);
-    var gridProjection = new OpenSpace.GridProjection();
     var pos = gridProjection.getMapPointFromLonLat(lonlat);
     osMap.setCenter(pos, 8);
 
     var markers = new OpenLayers.Layer.Markers("Markers");
     osMap.addLayer(markers);
-
+    
+    var size = new OpenLayers.Size(33,45);
+    var offset = new OpenLayers.Pixel(-(size.w/2), -size.h);
+    var icon = new OpenLayers.Icon('../images/marker_red.png', size, offset);
+    
     var marker;
-    marker = new OpenLayers.Marker(pos);
+    marker = new OpenLayers.Marker(pos, icon);
     markers.addMarker(marker);
   } else if (map_type == 'open_streetmap' || map_type == 'open_cyclemap'){
     if (map_type == 'open_streetmap'){
@@ -109,9 +122,10 @@ function centre_map_and_add_marker(coords, map_type){
     }
 
     layerMarkers = new OpenLayers.Layer.Markers("Markers");
-    var size = new OpenLayers.Size(21,25);
+    var size = new OpenLayers.Size(33,45);
     var offset = new OpenLayers.Pixel(-(size.w/2), -size.h);
-    layerMarkers.addMarker(new OpenLayers.Marker(lonlat));
+    var icon = new OpenLayers.Icon('../images/marker_red.png', size, offset);
+    layerMarkers.addMarker(new OpenLayers.Marker(lonlat, icon));
 
     if (map_type == 'open_streetmap'){
       openStreetMap.setCenter (lonlat, 15);
@@ -145,13 +159,77 @@ function update_location(){
     setDisplay('Looking up location&hellip;');
   }
 }
-function searchPostcode(postcode)
-{
- postcodeService.getLonLat(postcode, onResult);
- return false;
+function update_coords_after_search(longitude, latitude){
+  $('#search_results').hide();
+  setDisplay('Setting map to ' + $('#place').val());
+  $('.info').fadeIn(2000);
+  coords.longitude = longitude;
+  coords.latitude = latitude;
 }
-function onResult(mapPoint)
+function searchPostcode(postcode){
+  postcodeService.getLonLat(postcode, onPostcodeResult);
+  return false;
+}
+function onPostcodeResult(mapPoint){
+  if (isNaN(mapPoint.getEasting()) || isNaN(mapPoint.getNorthing())){
+    alert("Could not find a location for the postcode " + $('#postcode').val());
+  } else {
+    lonlat = gridProjection.getLonLatFromMapPoint(mapPoint);
+    coords.longitude = lonlat.lon;
+    coords.latitude = lonlat.lat;
+    setDisplay('Setting map to ' + $('#postcode').val());
+    $('.info').fadeIn(2000);
+  }
+}
+
+function searchPlace(address)
 {
-  lonlat = getLonLatFromMapPoint(mapPoint);
- alert(lonlat);
+  if (geocoder) {
+    geocoder.geocode( { 'address': address + " United Kingdom"}, function(results, status) {
+      if (status == google.maps.GeocoderStatus.OK) {
+        if (results.length == 1){
+          var lonlat = results[0].geometry.location;
+          coords.longitude = lonlat.lng();
+          coords.latitude = lonlat.lat();
+          setDisplay('Setting map to ' + $('#place').val());
+          $('.info').fadeIn(2000);
+        } else {
+          var choices = new Array();
+          for (var i=0; i < results.length; i++){
+            // Extract result fields
+            var address_components = results[i].address_components;
+            var locality = "";
+            var county = "";
+            var country = "";
+            for (var j=0; j < address_components.length; j++){
+              if (address_components[j].types[0].match(/locality/)){
+                locality = address_components[j].short_name;
+              } else if (address_components[j].types[0].match(/administrative_area_level_2/)){
+                county = address_components[j].short_name;
+              }else if (address_components[j].types[0].match(/country/)){
+                country = address_components[j].short_name;
+              }
+            }
+            var name = "";
+            if (locality != ""){
+              name = name + locality + ", ";
+            }
+            if (county != ""){
+              name = name + county + ", ";
+            }
+            if (country != "undefined"){
+              name = name + country;
+            }
+            var location  = results[i].geometry.location
+            choices.push({'name': name, 'longitude': location.lng(), 'latitude': location.lat() });
+          }
+          $('#search_results').show();
+          search_results_text = $.map(choices, function(c){return "<li><span onclick='update_coords_after_search(" + c.longitude + "," + c.latitude + ")'>" + c.name + "</span></li>"}).join('');
+          $('#search_results').html("<h1>Pick location</h1>" + search_results_text);
+        }
+      } else {
+        alert("Could not find a location for the place " + $('#place').val());
+      }
+    });
+  }
 }
