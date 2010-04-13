@@ -4,7 +4,7 @@
 }
 .fullscreen #osmap,.fullscreen #open_streetmap,.fullscreen #open_cyclemap {
   width: 320px;
-  height: 400px;
+  height: 410px;
 }
 #search_results{
   display: none;
