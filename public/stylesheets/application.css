@@ -6,6 +6,10 @@
   width: 320px;
   height: 415px;
 }
+.free_floating{
+  margin: 0px 10px 5px 10px;
+  text-align: center;
+}
 #search_results{
   display: none;
 }

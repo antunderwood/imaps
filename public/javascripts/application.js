@@ -140,6 +140,7 @@ function setDisplay(text) {
   $('.info').empty().append(text)
 }
 function update_location(){
+   $('#update_location_image').fadeIn(1500);
   // We pass "updateLocation" a callback function,
   // to run once we have the coordinates.
   // We also set it to a variable, so we can know
@@ -158,6 +159,7 @@ function update_location(){
   } else if (lookup){
     setDisplay('Looking up location&hellip;');
   }
+   $('#update_location_image').fadeOut(1500);
 }
 function update_coords_after_search(longitude, latitude){
   $('#search_results').hide();

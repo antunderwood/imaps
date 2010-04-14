@@ -1,7 +1,6 @@
 body{background:#000;}
 body>*{background:#c5ccd3 url(../images/jqtouch_apple_theme/pinstripes.png);}
 h1,h2{font:bold 18px Helvetica;text-shadow:rgba(255,255,255,.2) 0 1px 1px;color:#4c566c;margin:10px 20px 6px;}
-.free_floating{margin: 0px 10px 0px 10px;}
 .toolbar{-webkit-box-sizing:border-box;border-bottom:1px solid #2d3642;padding:10px;height:45px;background:url(../images/jqtouch_apple_theme/toolbar.png) #6d84a2 repeat-x;position:relative;}
 .black-translucent .toolbar{margin-top:20px;}
 .toolbar>h1{position:absolute;overflow:hidden;left:50%;top:10px;line-height:1em;margin:1px 0 0 -75px;height:40px;font-size:20px;width:150px;font-weight:bold;text-shadow:rgba(0,0,0,0.4) 0 -1px 0;text-align:center;text-overflow:ellipsis;white-space:nowrap;color:#fff;}
