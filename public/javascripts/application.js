@@ -147,7 +147,6 @@ function update_location(){
   // right away if it's working or not
   var lookup = jQT.updateLocation(function(geolocation_coords){
     if (geolocation_coords) {
-      alert('updating location');
       coords = geolocation_coords
       setDisplay('setting map to current location');
     } else {
